@@ -1,0 +1,4 @@
+        Iteration        AcceptPct        Objective        Penalties   FrontierDegree     SelCriterion  SelCriterionStd  MaxSelCriterPct       Coancestry   CoancestryRate MinCoancestryPct       Inbreeding   InbreedingRate MinInbreedingPct
+                0              NaN          0.90112          0.00000         13.25300          2.99826          0.96851         88.74315          0.00765          0.00765         20.90115          0.00254          0.03031              NaN
+              101         23.70370          1.00290          0.00000         10.12226          3.47247          1.08123         98.76647          0.00794          0.00794         17.63258         -0.00033          0.02752              NaN
+              300         74.81481          1.00759          0.00000         10.09280          3.49430          1.08642         99.22788          0.00794          0.00794         17.66232         -0.00042          0.02744              NaN
