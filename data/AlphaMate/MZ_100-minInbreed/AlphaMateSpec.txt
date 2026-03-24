@@ -1,0 +1,12 @@
+Seed                        , 15
+NrmMatrixFile               , GRM-MZ.txt
+SelCriterionFile            , Criterion_dSurvMZ.txt
+GenderFile                  , Gender-MZ.txt
+NumberOfMatings             , 100
+NumberOfMaleParents	    , 100
+LimitMaleContributionsMax   , 3
+NumberOfFemaleParents	    , 100
+LimitFemaleContributionsMax , 1
+ModeMinInbreeding	        , Yes
+
+Stop
