@@ -1,3 +1,0 @@
-Current (random mating/crossing),                        0.0000000082379002
-Current (random mating/crossing, no selfing),           -0.0005478466562609
-Current (random mating/crossing between genders),       -0.0005073036097845
