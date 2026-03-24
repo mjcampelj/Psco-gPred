@@ -1,4 +1,4 @@
-# Pseudophryne corroboree Genomic Predictions
+# *Pseudophryne corroboree* Genomic Predictions
 
 This repository contains the data and code to reproduce the results from Davidson et al. (2026) *Genomic selection to enhance disease resilience in an endangered frog.*
 
