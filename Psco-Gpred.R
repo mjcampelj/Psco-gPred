@@ -15,7 +15,6 @@ pacman::p_load(readxl, OpenMx, gplots, dplyr, corrplot, ggplot2, data.table, jso
 )
 devtools::install_github("esteinig/netview")
 
-
 #-------------------------------------------------------------------
 #   PHENOTYPE FILES ----
 #-------------------------------------------------------------------
@@ -35,7 +34,6 @@ pheno <- pheno %>%
 #-------------------------------------------------------------------
 #   GRM ----
 #-------------------------------------------------------------------
-
 #--- Gaston GRM ----
 # Load bed matrix 
 bedM <- read.bed.matrix("data/filteredPsco.37768") 
@@ -71,7 +69,6 @@ dimnames(gaston_dInv)[[1]] <- as.character(pheno$ID)
 dimnames(gaston_dInv)[[2]] <- as.character(pheno$ID)
 attr(gaston_dInv,"INVERSE") <- TRUE
 
-
 #--- Plot GRM as heat map ---- 
 heatmap.2(gaston_GRM, scale = "none", col = bluered(100), 
           trace = "none", density.info = "none")
@@ -92,11 +89,9 @@ GRM_heatmap <- pheatmap(gaston_GRM,
                         legend_labels = c("0", "0.5", "1")
 )
 
-
 pdf("figures/formatted/FigureS5-GRM.pdf", width = 8, height = 8)
 GRM_heatmap
 dev.off()
-
 
 #--- GRM Variance ----
 # For GCTA-GREML power calculator, need the SNP derived genetic relationship variance
@@ -109,7 +104,6 @@ off_diagonal_elements <- gaston_GRM[upper.tri(gaston_GRM, diag = FALSE)]
 var(off_diagonal_elements)
 # 0.009229
 # Variance for power caluclator 
-
 
 
 #----------------------------------------------------------------
@@ -154,9 +148,6 @@ plot(summary(daysSurv_nul,coef=T)$coef.random[,1])
 # write GEBVs out
 write.csv(gebv_dsurv_nul, "output/ASRemlgebv_slope_nul.csv", row.names = FALSE)
 
-
-
-
 #--- ZOO ----
 daysSurv_zoo <- asreml(fixed=days_survived~1 + zoo,
                        random=~vm(ID,gaston_gInv),
@@ -181,7 +172,6 @@ round(vpredict(daysSurv_zoo,h2~(V1)/(V1+V2))$SE,3)
 # Get phenotypic SE = sqrt of genetic SE ^2 + sqrt residual SE ^2
 sqrt(14.19^2 + 17.21^2)
 
-
 #--- AGE ----
 daysSurv_age <- asreml(fixed=days_survived~1 + age_start,
                        random=~vm(ID,gaston_gInv),
@@ -200,14 +190,6 @@ summary(daysSurv_age, coef=TRUE)$coef.fixed
 vpredict(daysSurv_age,h2~V1/(V1+V2))$Estimate 
 # SE of heritability 
 round(vpredict(daysSurv_age,h2~(V1)/(V1+V2))$SE,3)
-
-
-
-
-
-
-
-
 
 #--- AGE + ZOO ----
 daysSurv_age_zoo <- asreml(fixed=days_survived~ age_start + zoo,
@@ -236,8 +218,6 @@ plot(summary(summary(daysSurv_age_zoo,coef=T)$coef.random[,1]))
 
 # write GEBVs out
 write.csv(gebv_daysSurv_age_zoo, "output/ASReml-gebv_dSurv-AgeZoo.csv", row.names = FALSE)
-
-
 
 
 #--- DOMINANCE ----
@@ -269,16 +249,12 @@ round(vpredict(DdaysSurv_age_zoo, h2_additive ~ V1/(V1 + V2 + V3))$SE, 3)
 round(vpredict(DdaysSurv_age_zoo, h2_dominance ~ V2/(V1 + V2 + V3))$SE, 3)
 
 
-
-
 #----------------------
 #  PATHOGEN LOAD ----
 #----------------------
 # CHECK DATA ----
-# this is the slope of the log transformed bd loads 
+# slope of the log transformed bd loads 
 hist(pheno$slope_bd)
-
-
 #--- NUL ----
 slope_nul <- asreml(fixed=slope_bd~1,
                     random=~vm(ID,gaston_gInv),
@@ -304,8 +280,6 @@ summary(slope_nul, coef=TRUE)$coef.random
 # Incremental wald tests
 wald.asreml(slope_nul, denDF='algebraic')$wald
 
-
-
 # GEBV ----
 gebv_slope_nul <- as.data.frame(summary(slope_nul,coef=T)$coef.random[,1])
 gebv_slope_nul
@@ -315,12 +289,6 @@ plot(summary(slope_nul,coef=T)$coef.random[,1])
 
 # write GEBVs out
 write.csv(gebv_slope_nul, "output/ASReml-gebv_slope_null.csv", row.names = FALSE)
-
-
-
-
-
-
 
 #--- ZOO ----
 slope_zoo <- asreml(fixed=slope_bd~1 + zoo,
@@ -341,13 +309,6 @@ vpredict(slope_zoo,h2~V1/(V1+V2))$Estimate
 # SE of heritability 
 round(vpredict(slope_zoo,h2~(V1)/(V1+V2))$SE,3)
 
-
-
-
-
-
-
-
 #--- AGE ----
 slope_age <- asreml(fixed=slope_bd~1 + age_start,
                     random=~vm(ID,gaston_gInv),
@@ -366,14 +327,6 @@ summary(slope_age, coef=TRUE)$coef.fixed
 vpredict(slope_age,h2~V1/(V1+V2))$Estimate 
 # SE of heritability 
 round(vpredict(slope_age,h2~(V1)/(V1+V2))$SE,3)
-
-
-
-
-
-
-
-
 
 #--- AGE + ZOO ----
 slope_age_zoo <- asreml(fixed=slope_bd~ age_start + zoo,
@@ -403,7 +356,6 @@ plot(summary(slope_age_zoo,coef=T)$coef.random[,1])
 
 # write GEBVs out
 write.csv(gebv_slope_age_zoo, "output/ASReml-gebv_slope-AgeZoo.csv", row.names = FALSE)
-
 
 
 #--- DOMINANCE ----
@@ -460,7 +412,6 @@ vpredict(bc_nul,h2~V1/(V1+V2))$Estimate
 # SE of heritability 
 round(vpredict(bc_nul,h2~(V1)/(V1+V2))$SE,3)
 
-
 #--- ZOO ----
 bc_zoo <- asreml(fixed=bc_start~1 + zoo,
                  random=~vm(ID,gaston_gInv),
@@ -479,9 +430,6 @@ summary(bc_zoo, coef=TRUE)$coef.fixed
 vpredict(bc_zoo,h2~V1/(V1+V2))$Estimate 
 # SE of heritability 
 round(vpredict(bc_zoo,h2~(V1)/(V1+V2))$SE,3)
-
-
-
 
 #--- AGE ----
 bc_age <- asreml(fixed=bc_start~1 + age_start,
@@ -502,8 +450,6 @@ vpredict(bc_age,h2~V1/(V1+V2))$Estimate
 # SE of heritability 
 round(vpredict(bc_age,h2~(V1)/(V1+V2))$SE,3)
 
-
-
 #--- AGE + ZOO ----
 bc_age_zoo <- asreml(fixed=bc_start~ age_start + zoo,
                      random=~vm(ID,gaston_gInv),
@@ -523,7 +469,6 @@ vpredict(bc_age_zoo,h2~V1/(V1+V2))$Estimate
 # SE of heritability 
 round(vpredict(bc_age_zoo,h2~(V1)/(V1+V2))$SE,3)
 
-
 # GEBV ----
 gebv_bc_age_zoo <- as.data.frame(summary(bc_age_zoo,coef=T)$coef.random[,1])
 gebv_bc_age_zoo
@@ -533,9 +478,6 @@ plot(summary(bc_age_zoo,coef=T)$coef.random[,1])
 
 # write GEBVs out
 write.csv(gebv_bc_age_zoo, "output/ASReml-gebv_BC-AgeZoo.csv", row.names = FALSE)
-
-
-
 
 #--- DOMINANCE ----
 #--- Age + Zoo ----
@@ -605,8 +547,6 @@ vpredict(slope_bc,rg~V2/sqrt(V1*V3)) # genetic correlation
 vpredict(slope_bc,re~V6/sqrt(V5*V7)) # environmental correlation
 vpredict(slope_bc,rp~(V2 + V6)/sqrt((V1 + V5) * (V3 + V7))) # phenotypic correlation. 
 
-
-
 # survival and body condition ----
 plot(pheno$days_survived, pheno$bc_start)
 
@@ -620,7 +560,6 @@ summary(survival_bc)$varcomp
 vpredict(survival_bc,rg~V2/sqrt(V1*V3)) # genetic correlation 
 vpredict(survival_bc,re~V6/sqrt(V5*V7)) # environmental correlation
 vpredict(survival_bc,rp~(V2 + V6)/sqrt((V1 + V5) * (V3 + V7))) # phenotypic correlation. 
-
 
 #--- Plot correlations ----
 # Summarised the correlation in excell for all traits 
@@ -650,8 +589,6 @@ corrplot(rG,
          mar=c(0,0,5,0), 
          diag = FALSE)
 
-
-
 #--- Phenotypic correlations ----
 rP <- read_xlsx("output/Trait-correlations.xlsx", sheet = "rP")
 # Remove the first column 
@@ -675,7 +612,6 @@ corrplot(rP,
          mar=c(0,0,5,0), 
          diag = FALSE)
 
-
 #--- Environmental correlations ----
 rE <- read_xlsx("output/Trait-correlations.xlsx", sheet = "rE")
 # Remove the first column 
@@ -698,7 +634,6 @@ corrplot(rE,
          addCoef.col = "black",   
          mar=c(0,0,5,0), 
          diag = FALSE)
-
 
 #--- Combine phenotype and genotype correlations ----
 # Environmental correlations 
@@ -772,8 +707,6 @@ corrplot(rPrG,
          mar=c(0,0,0,0))
 dev.off()
 
-
-
 #-------------------------------------------------------------------
 #   PCA ----
 #-------------------------------------------------------------------
@@ -807,9 +740,6 @@ pScree <- ggplot(scree_data, aes(x = PC, y = Variance_Explained * 100)) +  # Mul
 
 pScree
 
-
-
-
 #~~~ Scores ------------------- 
 plot(psco_pcadapt_kplotAll, option = "scores", i = 1 , j = 2)
 # Pull scores so can plot manually
@@ -823,9 +753,6 @@ ggplot(pca_scoresAll, aes(x = PC1, y = PC2)) +
   labs( x = "PC1", y = "PC2") +      
   theme_cowplot()
 
-
-
-
 # Pull variance to plot manually 
 singular_values <- psco_pcadapt_kplotAll$singular.values
 # Square the singular values
@@ -837,8 +764,6 @@ variance_explained <- squared_singular_values / total_variance
 print(variance_explained)
 # PC 1 = 12.88%
 # PC 2 = 8.77%
-
-
 
 # ~~~ Highlight PCA from breeding simulations--------
 # Read .fam file to get individual IDs
@@ -913,12 +838,10 @@ ggplot(pca_12, aes(x = PC1, y = PC2, color = MateGroupPlot)) +
   labs(x = "PC1", y = "PC2") +
   theme_cowplot()
 
-
 # Check number highlighted
 table(pca_12$MateGroupPlot)
 # 1      2       3    Other 
 # 255    59      9    572 
-
 
 
 # ~~~ Maximum criterion/gains  --------
@@ -977,7 +900,6 @@ pScoreMinInb
 # check numbers highlighted 
 table(pca_12$highlightMinInb) #highlight = 393   other = 502 
 
-
 # ~~~ Minimum coancestry  --------
 # Min inbreed file
 highlight_MinCoA <- "data/AlphaMate/200matings-OCS/ContributorsModeMinCoancestry.txt"
@@ -1006,7 +928,6 @@ pScoreMinCoA
 
 # check numbers highlighted 
 table(pca_12$highlightMinCoA) #highlight = 392   other = 503 
-
 
 # ~~~ EBVs - top 10%  --------
 # EBV file
@@ -1042,10 +963,6 @@ pScoreEBV20
 # check numbers highlighted 
 table(pca_12$highlightEBVs) #highlight = 179   other = 716 
 
-
-
-
-
 # ~~~ Combine Scores plots ----
 #pPCAcombined <- plot_grid(pScoreMaxCri, pScoreMinInb, pScoreOCS6, pScoreEBV10,
  #                         labels = "AUTO", rel_widths = c(1, 1.2))
@@ -1060,7 +977,6 @@ pPCAcombined <- plot_grid(
 )
 
 pPCAcombined
-
 
 ## 100 Matings ----
 # ~~~ OCS 4 - 100 matings --------
@@ -1092,8 +1008,6 @@ pScoreOCS4_100
 # check numbers highlighted 
 table(pca_12$highlightOCS100) #highlight = 155   other = 740 
 
-
-
 # ~~~ Maximum criterion/gains --------
 # Maximum Criterion file
 highlight_MaxCri100 <- "data/AlphaMate/100matings-maxCri/ContributorsModeMaxCriterion.txt"
@@ -1122,11 +1036,6 @@ pScoreMaxCri100
 
 # check numbers highlighted 
 table(pca_12$highlightMaxCri100) #highlight = 134   other = 761 
-
-
-
-
-
 
 # ~~~ Minimum inbreeding --------
 # Min inbreed file
@@ -1157,7 +1066,6 @@ pScoreMinInb100
 # check numbers highlighted 
 table(pca_12$highlightMinInb100) #highlight = 189   other = 706 
 
-
 # ~~~ Minimum coansestry --------
 # Min inbreed file
 highlight_MinCoA100 <- "data/AlphaMate/100matings-OCS/ContributorsModeMinCoancestry.txt"
@@ -1187,7 +1095,6 @@ pScoreMinCoA100
 # check numbers highlighted 
 table(pca_12$highlightMinCoA100) #highlight = 199   other = 696 
 
-
 # ~~~ Combine Scores plots 100 matings ----
 
 pPCAcombined_100 <- plot_grid(
@@ -1215,11 +1122,8 @@ pPCAcombined_100_notitle <- plot_grid(
 
 pPCAcombined_100_notitle
 
-
 # Save
-ggsave("figures/Figure3-PCA.pdf", plot = pPCAcombined_100_notitle, width = 12, height = 4)
-
-
+ggsave("figures/Figure3-PCA_BreedingSim.pdf", plot = pPCAcombined_100_notitle, width = 12, height = 4)
 
 # ~~~ Combine Scores plots 100 + 200 matings ----
 pPCAcombined_12 <- plot_grid(
@@ -1264,7 +1168,6 @@ EBV_daysurv <- EBV_daysurv %>%
 
 # Save as CSV to get number of animals per % for selection 
 # write.table(EBV_daysurv, file = "output/EBV_daysSurvived-rankings.csv", sep = ",")
-
 
 # Calculate the % of animals in the top X %, from each zoo 
 # list of top % want to calculate 
@@ -1324,12 +1227,9 @@ for (top_x_percent in top_x_percent_list) {
 # Display the combined results
 print(uniqueFams_dsurv)
 
-
 #----------------------------------------------------------------
 #    GENOME WIDE ASSOCIATION ANALYSIS ----
 #----------------------------------------------------------------
-
-
 #------------------------------
 #   SIGNIFICANCE THRESHOLD ----
 #------------------------------
@@ -1337,9 +1237,7 @@ print(uniqueFams_dsurv)
 # Number of SNPS = 37768 ----
 # Number of unlinked SNPS = 5795 ----
 # SNPs with a r2 < 0.2 
-
 # Use unlinked SNPs
-
 # Genomewide line ----
 # Bonferonni correction (0.05) / number snps 
 # 0.05/5795
@@ -1366,9 +1264,7 @@ source("../../programs/power_calc_functions.R")
 # n = Sample size (has to be >= 0).
 # qsq = Fraction of trait variance explained by the SNP (has to be between 0 and 1). Denoted as q^2 or q-squared; other studies use h^2 too, to indicate it's similarity with heritability.
 # pval = P-value threshold for significance. 
-
 power_n_hsq(n = (1:9)*100, qsq = (1:10)/100, pval=0.000009)
-
 
 #----------------------------------------------------------------
 #    Genome-Wide Association Study ----
@@ -1460,15 +1356,12 @@ qq.plot(gwas.table=gwasDaysSurv$gwas.all) +
   geom_abline(intercept = 0, slope = 1, color = "#b6d9f6")  
 dev.off()
 
-
 #--- Manhattan plot ----
 manhattan.plot(gwas.table = gwasDaysSurv$gwas.all, 
                point.size = 1.2) + 
   geom_hline(yintercept =  genoSigLine, color = "darkgrey", linetype = "solid") + 
   geom_hline(yintercept =  suggestSigLine,  color = "darkgrey", linetype = "dashed") +
   ylim(0, 6)
-
-
 
 pdf("figures/ASReml/manhattan_dSurv.pdf", width = 14, height = 5)
 manhattan.plot(gwas.table = gwasDaysSurv$gwas.all, 
@@ -1482,10 +1375,6 @@ manhattan.plot(gwas.table = gwasDaysSurv$gwas.all,
   theme(legend.position="none")+
   scale_colour_manual(values = rep(c("#648fb0", "#b6d9f6"), 6))
 dev.off()
-
-
-
-
 
 #--- USING EBVS ----
 # EBV data is already loaded, and has zoo and age in file 
@@ -1550,7 +1439,6 @@ qq.plot(gwas.table=gwasDaysSurvEBV$gwas.all) +
   geom_abline(intercept = 0, slope = 1, color = "#b6d9f6")  
 dev.off()
 
-
 pdf("figures/ASReml/manhattan_dSurvEBV.pdf", width = 14, height = 5)
 manhattan.plot(gwas.table = gwasDaysSurvEBV$gwas.all, 
                point.size = 1.2) + 
@@ -1563,8 +1451,6 @@ manhattan.plot(gwas.table = gwasDaysSurvEBV$gwas.all,
   theme(legend.position="none")+
   scale_colour_manual(values = rep(c("#648fb0", "#b6d9f6"), 6))
 dev.off()
-
-
 
 
 #--- Look at chromosomes separately ---- 
@@ -1643,7 +1529,7 @@ axis_df <- gwas_DS %>%
   summarize(center = mean(cum_pos))
 
 # Plot Manhattan 
-Fig3A <- ggplot(gwas_DS, aes(x = cum_pos, y = -log10(p.value), color = as.factor(chrom))) +
+FigS1A <- ggplot(gwas_DS, aes(x = cum_pos, y = -log10(p.value), color = as.factor(chrom))) +
   geom_hline(yintercept = genoSigLine, color = "grey40", linetype = "solid", linewidth = 0.6) +
   geom_hline(yintercept = suggestSigLine, color = "grey40", linetype = "dashed", linewidth = 0.6) +
   geom_point(alpha = 1, size = 1) +  
@@ -1660,7 +1546,7 @@ Fig3A <- ggplot(gwas_DS, aes(x = cum_pos, y = -log10(p.value), color = as.factor
     legend.position = "none" 
   )
 
-Fig3A 
+FigS1A 
 
 
 # B ----
@@ -1671,7 +1557,7 @@ expected_logP <- -log10(ppoints(length(gwas_DS$p.value)))
 # Sort the observed p-values
 observed_logP <- -log10(sort(gwas_DS$p.value))  
 
-Fig3B <- ggplot() +
+FigS1B <- ggplot() +
   geom_abline(slope = 1, intercept = 0, color = "#b6d9f6", linetype = "solid", size = 1) +  
   geom_point(aes(x = expected_logP, y = observed_logP), alpha = 0.6, color = "#648fb0") +  
   labs(
@@ -1699,7 +1585,7 @@ gwas_DS_chr7 <- gwas_DS_chr7 %>%
   mutate(is_significant = ifelse(p.value == min(p.value), "yes", "no"))
 
 # Plot only CHR 7
-Fig3C <- 
+Fig1C <- 
   ggplot(gwas_DS_chr7, aes(x = cum_pos / 1e6, y = logP)) +
   geom_hline(yintercept = genoSigLine, color = "grey40", linetype = "solid", linewidth = 0.6) +
   geom_hline(yintercept = suggestSigLine, color = "grey40", linetype = "dashed", linewidth = 0.6) +
@@ -1732,13 +1618,13 @@ Fig3C <-
   )
 
 
-Fig3C
+Fig1C
 
 
 # D ----
 
 # Plot Days survived significant SNP 
-Fig3D <- ggplot(snp_AX.691207752, aes(x = as.factor(Genotype), y = EBV_days_survived)) +
+Fig1D <- ggplot(snp_AX.691207752, aes(x = as.factor(Genotype), y = EBV_days_survived)) +
   stat_boxplot(geom ='errorbar', 
                colour = "grey40", 
                width = 0.2) + 
@@ -1755,11 +1641,11 @@ Fig3D <- ggplot(snp_AX.691207752, aes(x = as.factor(Genotype), y = EBV_days_surv
   theme_cowplot() +
   theme(legend.position = "none")
 
-Fig3D 
+Fig1D 
 
 
 # Combine figure ----
-Fig3 <- ggarrange(
+FigS1 <- ggarrange(
   ggarrange(Fig3A, Fig3B, ncol = 2, labels = c("A", "B"), 
             widths = c(2, 1)), 
   ggarrange(Fig3C, Fig3D, ncol = 2, labels = c("C", "D"),
@@ -1767,26 +1653,10 @@ Fig3 <- ggarrange(
   nrow = 2
 ) 
 
-Fig3
+FigS1
 
-ggsave("figures/FigureS1-GWAS-survival.pdf", plot = Fig3, 
+ggsave("figures/FigureS1-GWAS-survival.pdf", plot = FigS1, 
        width = 20, height = 10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #--- Format figure of Chr11 ----
@@ -1805,7 +1675,7 @@ gwas_DS_chr11 <- gwas_DS_chr11 %>%
   mutate(is_significant = ifelse(p.value == min(p.value), "yes", "no"))
 
 # Plot only CHR 11
-Fig9A <- 
+FigS3A <- 
   ggplot(gwas_DS_chr11, aes(x = cum_pos / 1e6, y = logP)) +
   geom_hline(yintercept = genoSigLine, color = "grey40", linetype = "solid", linewidth = 0.6) +
   geom_hline(yintercept = suggestSigLine, color = "grey40", linetype = "dashed", linewidth = 0.6) +
@@ -1838,11 +1708,11 @@ Fig9A <-
   )
 
 
-Fig9A
+FigS3A
 
 
 # B ----
-Fig9B <- ggplot(snp_AX.691449917, aes(x = as.factor(Genotype), y = EBV_days_survived)) +
+FigS3B <- ggplot(snp_AX.691449917, aes(x = as.factor(Genotype), y = EBV_days_survived)) +
   stat_boxplot(geom ='errorbar', 
                colour = "grey40", 
                width = 0.2) + 
@@ -1859,37 +1729,21 @@ Fig9B <- ggplot(snp_AX.691449917, aes(x = as.factor(Genotype), y = EBV_days_surv
   theme_cowplot() +
   theme(legend.position = "none")
 
-Fig9B
+FigS3B
 
 
 
 
 # Combine ----
-Fig9 <- ggarrange(
-  ggarrange(Fig9A, Fig9B, ncol = 2, labels = c("A", "B"), 
+FigS3 <- ggarrange(
+  ggarrange(FigS3A, FigS3B, ncol = 2, labels = c("A", "B"), 
             widths = c(2, 1))
 ) 
 
-Fig9
+FigS3
 
-ggsave("figures/FigureS3-GWAS-survivalCHR11.pdf", plot = FigS9, 
+ggsave("figures/FigureS3-GWAS-survivalCHR11.pdf", plot = FigS3, 
        width = 20, height = 5)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #----------------------------
 #   PATHOGEN LOAD ----
@@ -1970,11 +1824,6 @@ manhattan.plot(gwas.table = gwasSlope$gwas.all,
   theme(legend.position="none")+
   scale_colour_manual(values = rep(c("#648fb0", "#b6d9f6"), 6))
 dev.off()
-
-
-
-
-
 
 #--- USING EBVS ----
 # EBV data is already loaded, and has zoo and age in file 
@@ -2091,10 +1940,6 @@ qqman::manhattan(subset(gwas_slope_renamed, CHR == 7),
                  annotatePval = 0.001, annotateTop = FALSE)
 
 
-
-
-
-
 # Fortmat figure  ----
 # EBV GWAS for Slope
 # A ----
@@ -2122,7 +1967,7 @@ axis_df <- gwas_SL %>%
   summarize(center = mean(cum_pos))
 
 # Plot Manhattan 
-Fig7A <- ggplot(gwas_SL, aes(x = cum_pos, y = logP, color = as.factor(chrom))) +
+FigS2A <- ggplot(gwas_SL, aes(x = cum_pos, y = logP, color = as.factor(chrom))) +
   geom_hline(yintercept = genoSigLine, color = "grey40", linetype = "solid", linewidth = 0.6) +
   geom_hline(yintercept = suggestSigLine, color = "grey40", linetype = "dashed", linewidth = 0.6) +
   geom_point(alpha = 1, size = 1) +  
@@ -2139,7 +1984,7 @@ Fig7A <- ggplot(gwas_SL, aes(x = cum_pos, y = logP, color = as.factor(chrom))) +
     legend.position = "none" 
   )
 
-Fig7A
+FigS2A
 
 
 # B ----
@@ -2150,7 +1995,7 @@ expected_logP <- -log10(ppoints(length(gwas_SL$p.value)))
 # Sort the observed p-values
 observed_logP <- -log10(sort(gwas_SL$p.value))  
 
-Fig7B <- ggplot() +
+FigS2B <- ggplot() +
   geom_abline(slope = 1, intercept = 0, color = "#b6d9f6", linetype = "solid", size = 1) +  
   geom_point(aes(x = expected_logP, y = observed_logP), alpha = 0.6, color = "#648fb0") +  
   labs(
@@ -2162,7 +2007,7 @@ Fig7B <- ggplot() +
   scale_y_continuous(breaks = seq(1, 6, by = 1)) +  
   theme_cowplot()
 
-Fig7B
+FigS2B
 
 
 # C ----
@@ -2180,7 +2025,7 @@ gwas_SL_chr7 <- gwas_SL_chr7 %>%
   mutate(is_significant = ifelse(p.value == min(p.value), "yes", "no"))
 
 # Plot only CHR 7
-Fig7C <- 
+FigS2C <- 
   ggplot(gwas_SL_chr7, aes(x = cum_pos / 1e6, y = logP)) +
   geom_hline(yintercept = genoSigLine, color = "grey40", linetype = "solid", linewidth = 0.6) +
   geom_hline(yintercept = suggestSigLine, color = "grey40", linetype = "dashed", linewidth = 0.6) +
@@ -2212,15 +2057,12 @@ Fig7C <-
     legend.position = "none" 
   )
 
-
-Fig7C
-
-
+FigS2C
 
 # D ----
 
 # Plot Days survived significant SNP 
-Fig7D <- ggplot(snp_AX.691200909, aes(x = as.factor(Genotype), y = EBV_days_survived)) +
+FigS2D <- ggplot(snp_AX.691200909, aes(x = as.factor(Genotype), y = EBV_days_survived)) +
   stat_boxplot(geom ='errorbar', 
                colour = "grey40", 
                width = 0.2) + 
@@ -2237,39 +2079,21 @@ Fig7D <- ggplot(snp_AX.691200909, aes(x = as.factor(Genotype), y = EBV_days_surv
   theme_cowplot() +
   theme(legend.position = "none")
 
-Fig7D
-
-
-
+FigS2D
 
 # Combine ----
-Fig7 <- ggarrange(
-  ggarrange(Fig7A, Fig7B, ncol = 2, labels = c("A", "B"), 
+FigS2 <- ggarrange(
+  ggarrange(FigS2A, FigS2B, ncol = 2, labels = c("A", "B"), 
             widths = c(2, 1)), 
-  ggarrange(Fig7C, Fig7D, ncol = 2, labels = c("C", "D"),
+  ggarrange(FigS2C, FigS2D, ncol = 2, labels = c("C", "D"),
             widths = c(2, 1)), 
   nrow = 2
 ) 
 
-Fig7
+FigS2
 
-ggsave("figures/FigureS2GWAS-pathLoad.pdf", plot = FigS7, 
+ggsave("figures/FigureS2-GWAS-pathLoad.pdf", plot = FigS2, 
        width = 20, height = 10)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #----------------------------
 #    BODY CONDITION ----
@@ -2348,9 +2172,6 @@ manhattan.plot(gwas.table = gwasBC$gwas.all,
   theme(legend.position="none")+
   scale_colour_manual(values = rep(c("#648fb0", "#b6d9f6"), 6))
 dev.off()
-
-
-
 
 #--- USING EBVS ----
 # EBV data is already loaded, and has zoo and age in file 
