@@ -6,9 +6,9 @@ This repository contains the data and code to reproduce the results from Davidso
 Files are structured within an R project (`Psco-Gpred.Rproj`). We recommend downloading the entire directory and working within the R project to ensure all relative file paths are correct.
 
 ## Reproducibility Notes
-While all files necessary to reproduce the analyses in the manuscript have been provided, some steps are not fully reproducible as they:
-- Required extensive computational resources and were performed on the University of Melbourne Spartan HPC cluster
-- Require licensed software (e.g. ASReml, AlphaMate) that must be purchased independently
+While all files necessary to reproduce the analyses in the manuscript have been provided, some steps are not fully reproducible as is, as they:
+- Require extensive computational resources. This work was performed on the University of Melbourne Spartan HPC cluster, and is formatted for such. If reproducing work on a differnt HPC or comupting platform it may need to be amended for workability. 
+- Require licensed software (e.g. ASReml) that must be purchased independently for code to work. Licenses are available for purchase at: https://asreml.kb.vsni.co.uk
 
 ## Data Availability
 Not all `/data` and `/RData` files are included in this repository due to GitHub file size limits. All files are available upon request.
