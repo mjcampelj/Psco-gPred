@@ -1,6 +1,6 @@
 # *Pseudophryne corroboree* Genomic Predictions
 
-This repository contains the data and code to reproduce the results from Davidson et al. (2026) *Genomic selection to enhance disease resilience in an endangered frog.*
+This repository contains the data and code to reproduce the results from Davidson et al. (2026) *Genomic selection to enhance disease resilience in an endangered species.*
 
 ## Getting Started
 Files are structured within an R project (`Psco-Gpred.Rproj`). We recommend downloading the entire directory and working within the R project to ensure all relative file paths are correct.
